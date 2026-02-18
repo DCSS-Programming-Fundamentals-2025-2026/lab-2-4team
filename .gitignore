@@ -482,4 +482,8 @@ $RECYCLE.BIN/
 *.swp
 
 *.slnx
+
 *.csproj
+*.csproj
+*.sln
+(Second commit)
