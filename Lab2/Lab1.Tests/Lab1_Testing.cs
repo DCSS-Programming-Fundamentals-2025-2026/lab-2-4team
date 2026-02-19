@@ -1,6 +1,8 @@
 using Lab1.App;
 using Lab1.Players;
 using Lab1.PlayingTable;
+using NUnit.Framework;
+using System;
 
 namespace Lab1.Tests
 {
@@ -39,9 +41,9 @@ namespace Lab1.Tests
 
             bool isGameOver = _mechanic.WinDraw(_players, _board, ref _score);
 
-            Assert.IsTrue(isGameOver, "Гра мала закінчитись");
-            Assert.AreEqual(1, _score[0], "Рахунок Гравця 1 мав стати 1");
-            Assert.AreEqual(0, _score[1], "Рахунок Гравця 2 не мав змінитись");
+            Assert.That(isGameOver, Is.True, "Гра мала закінчитись");
+            Assert.That(_score[0], Is.EqualTo(1), "Рахунок Гравця 1 мав стати 1");  
+            Assert.That(_score[1], Is.EqualTo(0), "Рахунок Гравця 2 не мав змінитись");
         }
 
         [TestCase(99)]
@@ -58,8 +60,8 @@ namespace Lab1.Tests
                 _mechanic.TurnChoose(_players, _board, ref playerTurn, ref badSelectionIndex, ref start, 0, 1),
             "Мав викинути помилку з виходом за межі");
 
-            Assert.AreEqual(0, playerTurn, "Черга мав залишитись колишньою");
-            Assert.IsTrue(start, "Цикл ходу не мав перерватися");
+            Assert.That(playerTurn, Is.EqualTo(0), "Черга мав залишитись колишньою");
+            Assert.That(start, Is.True, "Цикл ходу не мав перерватися");
         }
 
         [Test]
@@ -75,10 +77,10 @@ namespace Lab1.Tests
 
             _runner.SaveMatchLogs(newPlayers, _score, _board);
 
-            Assert.AreEqual(5, _runner.historyCount, "Кількість логів мала залишитись 5");
-            Assert.AreNotEqual("OldGuy0", _runner.matchInfo[0].NameP1, "OldGuy0 мав бути перезаписаний зсувом");
-            Assert.AreEqual("OldGuy1", _runner.matchInfo[0].NameP1, "На індексі 0 тепер має бути OldGuy1");
-            Assert.AreEqual("NewGuy", _runner.matchInfo[4].NameP1, "NewGuy має бути на останньому індексі 4");
+            Assert.That(_runner.historyCount, Is.EqualTo(5), "Кількість логів мала залишитись 5");
+            Assert.That(_runner.matchInfo[0].NameP1, Is.Not.EqualTo("OldGuy0"), "OldGuy0 мав бути перезаписаний зсувом");
+            Assert.That(_runner.matchInfo[0].NameP1, Is.EqualTo("OldGuy1"), "На індексі 0 тепер має бути OldGuy1");
+            Assert.That(_runner.matchInfo[4].NameP1, Is.EqualTo("NewGuy"), "NewGuy має бути на останньому індексі 4");
         }
 
         [TestCase(0, 0, 4)]
@@ -98,12 +100,12 @@ namespace Lab1.Tests
 
             bool isGameOver = _mechanic.WinDraw(_players, _board, ref _score);
 
-            Assert.AreEqual('X', _board[b], "На позиції 0 має бути Х");
-            Assert.AreEqual('O', _board[c], "На позиції 4 має бути О");
-            Assert.AreEqual(0, playerTurn, "Черга має знову стати 0");
-            Assert.IsFalse(isGameOver, "Гра ще не закінчилася");
-            Assert.AreEqual(0, _score[0], "Рахунок Гравця 1 має бути 0");
-            Assert.AreEqual(0, _score[1], "Рахунок Гравця 2 має бути 0");
+            Assert.That(_board[b], Is.EqualTo('X'), "На позиції 0 має бути Х");
+            Assert.That(_board[c], Is.EqualTo('O'), "На позиції 4 має бути О");
+            Assert.That(playerTurn, Is.EqualTo(0), "Черга має знову стати 0");
+            Assert.That(isGameOver, Is.False, "Гра ще не закінчилася");
+            Assert.That(_score[0], Is.EqualTo(0), "Рахунок Гравця 1 має бути 0");
+            Assert.That(_score[1], Is.EqualTo(0), "Рахунок Гравця 2 має бути 0");
         }
 
         [Test]
@@ -121,9 +123,9 @@ namespace Lab1.Tests
 
             bool isGameOver = _mechanic.WinDraw(_players, _board, ref _score);
 
-            Assert.IsTrue(isGameOver, "Гра мала закінчитись");
-            Assert.AreEqual(0, _score[0], "Рахунок Гравця 1 не мав змінитись");
-            Assert.AreEqual(0, _score[1], "Рахунок Гравця 2 не мав змінитись");
+            Assert.That(isGameOver, Is.True, "Гра мала закінчитись");
+            Assert.That(_score[0], Is.EqualTo(0), "Рахунок Гравця 1 не мав змінитись");
+            Assert.That(_score[1], Is.EqualTo(0), "Рахунок Гравця 2 не мав змінитись");
         }
     }
 }

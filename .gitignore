@@ -487,3 +487,6 @@ $RECYCLE.BIN/
 *.csproj
 *.sln
 (Second commit)
+!Lab1.Tests/bin/
+!Lab1.Tests/obj/
+!Lab1.Tests/Lab1.Tests.csproj
