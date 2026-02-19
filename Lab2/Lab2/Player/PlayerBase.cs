@@ -1,4 +1,5 @@
 namespace Lab1.Players;
+
 public abstract class PlayerBase
 {
     public string Name { get; set; }

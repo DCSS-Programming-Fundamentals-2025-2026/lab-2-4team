@@ -30,7 +30,6 @@ public class Board : IBoardRenderer
                 }
             }
             Console.WriteLine();
-
         }
         Console.WriteLine("---------");
     }

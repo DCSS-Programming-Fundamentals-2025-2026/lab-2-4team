@@ -8,7 +8,7 @@ public class Mechanic
 
     public void Turn(Player[] players, char[] board, ref int PlayerTurn, ref int SelectionIndex)
     {
-        Console.Clear();
+        SafeClear();
         IBoardRenderer obj = new Board();
 
         obj.DrawBoard(board, SelectionIndex, PlayerTurn);
@@ -23,45 +23,49 @@ public class Mechanic
             {
                 case ConsoleKey.UpArrow:
                     if (SelectionIndex - 3 < 0)
-                    { continue; }
-
-                    Console.Clear();
+                    { 
+                        continue; 
+                    }
+                    SafeClear();
                     TurnWithDecrement(players, board, PlayerTurn, ref SelectionIndex, 3);
                     break;
 
                 case ConsoleKey.DownArrow:
                     if (SelectionIndex + 3 > 8)
-                    { continue; }
-                    
-                    Console.Clear();
+                    { 
+                        continue; 
+                    }
+                    SafeClear();
                     TurnWithIncrement(players, board, PlayerTurn, ref SelectionIndex, 3);
                     break;
 
                 case ConsoleKey.RightArrow:
                     if (SelectionIndex + 1 > 8)
-                    { continue; }
-
-                    Console.Clear();
+                    { 
+                        continue; 
+                    }
+                    SafeClear();
                     TurnWithIncrement(players, board, PlayerTurn, ref SelectionIndex, 1);
                     break;
 
                 case ConsoleKey.LeftArrow:
                     if (SelectionIndex - 1 < 0)
-                    { continue; }
-
-                    Console.Clear();
+                    { 
+                        continue; 
+                    }
+                    SafeClear();
                     TurnWithDecrement(players, board, PlayerTurn, ref SelectionIndex, 1);
                     break;
 
                 case ConsoleKey.Enter:
                     if (PlayerTurn == 0 && board[SelectionIndex] == 0)
                     {
-                        Console.Clear();
+                        SafeClear();
                         TurnChoose(players, board, ref PlayerTurn, ref SelectionIndex, ref start, 0, 1);
                     }
                     else if (PlayerTurn == 1 && board[SelectionIndex] == 0)
                     {
-                        Console.Clear();
+                        SafeClear();
                         TurnChoose(players, board, ref PlayerTurn, ref SelectionIndex, ref start, 1, 0);
                     }
                     else
@@ -83,7 +87,7 @@ public class Mechanic
 
         obj.DrawBoard(board, SelectionIndex, PlayerTurn);
 
-        Console.Clear();
+        SafeClear();
         SelectionIndex -= step;
 
         obj.DrawBoard(board, SelectionIndex, PlayerTurn);
@@ -96,7 +100,7 @@ public class Mechanic
 
         obj.DrawBoard(board, SelectionIndex, PlayerTurn);
 
-        Console.Clear();
+        SafeClear();
         SelectionIndex += step;
 
         obj.DrawBoard(board, SelectionIndex, PlayerTurn);
@@ -109,7 +113,7 @@ public class Mechanic
 
         obj.DrawBoard(board, SelectionIndex, PlayerTurn);
 
-        Console.Clear();
+        SafeClear();
         board[SelectionIndex] = players[index].Symbol;
 
         obj.DrawBoard(board, SelectionIndex, PlayerTurn);
@@ -182,9 +186,9 @@ public class Mechanic
         }
     }
 
-    private void DrawFinalBoard(char[] board)
+    public void DrawFinalBoard(char[] board)
     {
-        Console.Clear();
+        SafeClear();
         int n = (int)Math.Sqrt(board.Length);
 
         for (int i = 0; i < n; i++)
@@ -207,5 +211,17 @@ public class Mechanic
         }
         Console.WriteLine("---------");
         Console.WriteLine();
+    }
+
+    private void SafeClear()
+    {
+        try 
+        { 
+            Console.Clear(); 
+        } 
+        catch (IOException)
+        {
+            
+        }
     }
 }

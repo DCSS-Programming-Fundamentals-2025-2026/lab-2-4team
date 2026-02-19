@@ -21,6 +21,4 @@
             Board = board;
         }
     }
-
-
 }

@@ -7,9 +7,11 @@ namespace Lab1.App
     public class DemoRunner
     {
         private List<NickName> playersList = new List<NickName>();
-        private List<MatchInfo> matchInfo = new List<MatchInfo>();
+        public MatchInfo[] matchInfo = new MatchInfo[5];
+        public int historyCount = 0;
         private Mechanic mechanic = new Mechanic();
-        private int matchesCount = 0;
+        public int matchesCount = 0;
+        public int validIndex = -1;
 
         public void Run()
         {
@@ -66,9 +68,16 @@ namespace Lab1.App
 
         private void NewGame(Player[] players, char[] board, ref int SelectionIndex, int playerTurnIndex)
         {
+            bool validParametrs = false;
+
             players[0] = CreatePlayer(1);
             players[1] = CreatePlayer(2);
 
+            while (!validParametrs)
+            {
+                DublicateCheck(players, ref validParametrs);
+            }
+            
             IBoardRenderer obj = new Board();
 
             for (int i = 0; i < 9; i++)
@@ -137,6 +146,38 @@ namespace Lab1.App
             return new (name, symbol);
         }
 
+        private void DublicateCheck(Player[] players, ref bool validParametrs)
+        {
+            if (!IsValid(players, ref validIndex))
+            {
+                Console.WriteLine();
+                Console.WriteLine("Name or Symbol is taken/invalid please choose another one: ");
+                players[validIndex] = CreatePlayer(validIndex+1);
+            }
+            else
+            {
+                validParametrs = true;
+            }
+        }
+
+        private bool IsValid(Player[] players, ref int validIndex)
+        {
+            for(int i = 0; i < 2; i++)
+            {
+                if (string.IsNullOrWhiteSpace(players[i].Name))
+                {
+                    validIndex = i;
+                    return false;
+                }
+            }
+            if(players[0].Name == players[1].Name || 
+            players[0].Symbol == players[1].Symbol)
+            {
+                return false;
+            }
+            return true;
+        }
+
         private void ShowScore(Player[] players, int[] score)
         {
             Console.WriteLine();
@@ -156,7 +197,7 @@ namespace Lab1.App
             }
         }
 
-        private void SaveMatchLogs(Player[] players, int[] score, char[] board)
+        public void SaveMatchLogs(Player[] players, int[] score, char[] board)
         {
             for (int i = 0; i < players.Length; i++)
             {
@@ -182,7 +223,21 @@ namespace Lab1.App
             char[] boardCopy = new char[board.Length];
             Array.Copy(board, boardCopy, board.Length);
 
-            matchInfo.Add(new MatchInfo(players[0].Name, players[1].Name, players[0].Symbol, players[1].Symbol, score[0], score[1], boardCopy));
+            MatchInfo newMatch = new MatchInfo(players[0].Name, players[1].Name, players[0].Symbol, players[1].Symbol, score[0], score[1], boardCopy);
+
+            if(historyCount < 5)
+            {
+                matchInfo[historyCount] = newMatch;
+                historyCount++;
+            }
+            else
+            {
+                for(int i = 0; i < 4; i++)
+                {
+                    matchInfo[i] = matchInfo[i+1];
+                }
+                matchInfo[4] = newMatch;
+            }
 
             matchesCount++;
         }
@@ -192,7 +247,7 @@ namespace Lab1.App
             Console.WriteLine("------------------");
             Console.WriteLine($"Total matches played - {matchesCount}");
 
-            for (int i = 0; i < matchInfo.Count; i++)
+            for (int i = 0; i < matchesCount; i++)
             {
                 MatchInfo match = matchInfo[i];
                 Console.WriteLine($"Match #{i + 1}");
